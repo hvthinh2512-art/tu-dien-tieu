@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Từ điển Tiếng Tiều</title>
+<meta name="description" content="Tra từ tiếng Triều Châu (Tiều) theo chữ Hán, phiên âm, phiên âm bồi và nghĩa tiếng Việt.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%239e1b20'/%3E%3Ctext x='32' y='46' font-size='38' text-anchor='middle' fill='%23f3e7cc' font-family='serif'%3E潮%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Serif:wght@500;700&family=Noto+Serif+SC:wght@500;700&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+body{margin:0;font-size:14px}
+img{max-width:100%}
+[hidden]{display:none!important}
+
+/* Layout: sticky search bar on lacquer red, index of syllables, dictionary entries in one reading column */
+:root{
+  --bg:#f6f4f2; --paper:#ffffff; --ink:#221b1a; --muted:#6f6461; --line:#e4dcd8;
+  --lacquer:#9e1b20; --lacquer-ink:#ffffff; --gold:#b8862b; --gold-soft:#f3e7cc;
+  --tone:#9e1b20; --chip:#efe9e6; --danger:#b3261e; --ok:#2e7d4f;
+  --f-han:"Noto Serif SC","Songti SC","SimSun",serif;
+  --f-display:"Noto Serif",Georgia,serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171313; --paper:#211b1b; --ink:#f1e9e6; --muted:#a89a96; --line:#3a302f;
+  --lacquer:#7d151a; --lacquer-ink:#fff4f0; --gold:#d8aa52; --gold-soft:#3a2e1a;
+  --tone:#ff8a80; --chip:#2c2423; --danger:#ff8a80; --ok:#7fcf9c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171313; --paper:#211b1b; --ink:#f1e9e6; --muted:#a89a96; --line:#3a302f;
+  --lacquer:#7d151a; --lacquer-ink:#fff4f0; --gold:#d8aa52; --gold-soft:#3a2e1a;
+  --tone:#ff8a80; --chip:#2c2423; --danger:#ff8a80; --ok:#7fcf9c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--lacquer)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--lacquer);color:var(--lacquer-ink);
+  border-bottom:3px solid var(--gold)}
+header.top .wrap{padding-block:14px 14px;display:flex;flex-direction:column;gap:10px}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand h1{margin:0;font-family:var(--f-display);font-size:1.35rem;font-weight:700;letter-spacing:.01em}
+.brand .han{font-family:var(--f-han);font-size:1.15rem;opacity:.9}
+.brand .count{margin-left:auto;font-size:.82rem;opacity:.85;font-variant-numeric:tabular-nums}
+.searchrow{display:flex;gap:8px}
+.searchrow input{flex:1;min-width:0;border:0;border-radius:var(--r);padding:11px 14px;background:var(--paper);color:var(--ink);font-size:1rem}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:500;white-space:nowrap}
+.btn:hover{border-color:var(--gold)}
+.btn.primary{background:var(--lacquer);color:var(--lacquer-ink);border-color:var(--lacquer)}
+.btn.gold{background:var(--gold);color:#1d1406;border-color:var(--gold)}
+.btn.danger{color:var(--danger);border-color:var(--danger);background:transparent}
+.btn.small{padding:4px 10px;font-size:.82rem}
+.btn:disabled{opacity:.5;cursor:default}
+header .btn{border-color:transparent}
+.opts{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:.85rem;align-items:center}
+.opts label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.opts select{background:var(--paper);color:var(--ink);border:0;border-radius:6px;padding:3px 6px}
+main .wrap{padding-block:18px 60px;display:flex;flex-direction:column;gap:18px}
+.status{font-size:.85rem;color:var(--muted)}
+.status.warn{color:var(--danger)}
+.index{display:flex;flex-wrap:wrap;gap:6px}
+.index button{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:3px 11px;font-size:.84rem;cursor:pointer;font-variant-numeric:tabular-nums}
+.index button[aria-pressed="true"]{background:var(--lacquer);color:var(--lacquer-ink);border-color:var(--lacquer)}
+.index button .n{color:var(--muted);margin-left:4px;font-size:.75rem}
+.index button[aria-pressed="true"] .n{color:inherit;opacity:.8}
+.sec-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.list{display:flex;flex-direction:column;gap:12px}
+.entry{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.e-head{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.e-han{font-family:var(--f-han);font-size:2.1rem;line-height:1.1;font-weight:700}
+.e-pron{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.py{font-weight:600;font-size:1.05rem}
+.py sup{color:var(--tone);font-size:.68em;font-weight:700;margin-left:1px}
+.pron-row{font-size:.86rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+.pron-row b{color:var(--ink);font-weight:500}
+.e-tools{display:flex;gap:6px;margin-left:auto}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:.75rem;padding:2px 9px;border-radius:999px;background:var(--chip);color:var(--muted)}
+.tag.pos{background:var(--gold-soft);color:var(--ink)}
+.mean{font-size:1.08rem;font-weight:600}
+.mean .alt{font-weight:400;color:var(--muted)}
+.zh{font-family:var(--f-han);color:var(--muted);font-size:.95rem}
+.ex{border-left:3px solid var(--gold);padding:4px 0 4px 12px;display:flex;flex-direction:column;gap:2px;font-size:.93rem}
+.ex .tc{font-family:var(--f-han);font-size:1.05rem}
+.ex .bo{font-style:italic}
+.ex .vi{color:var(--ink)}
+.ex .pz{font-family:var(--f-han);color:var(--muted);font-size:.9rem}
+mark.hw{background:transparent;color:var(--lacquer);font-weight:700}
+:root[data-theme="dark"] mark.hw{color:var(--tone)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) mark.hw{color:var(--tone)}}
+mark.q{background:var(--gold-soft);color:inherit;border-radius:3px}
+.meta{font-size:.86rem;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.meta a{color:var(--lacquer);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+:root[data-theme="dark"] .meta a{color:var(--tone)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .meta a{color:var(--tone)}}
+.more{align-self:center}
+.empty{background:var(--paper);border:1px dashed var(--line);border-radius:var(--r);padding:26px;text-align:center;color:var(--muted)}
+/* panels */
+.overlay{position:fixed;inset:0;background:rgba(20,10,10,.45);z-index:20;display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 24px) max(12px,env(safe-area-inset-right,0px)) 24px max(12px,env(safe-area-inset-left,0px))}
+.panel{background:var(--paper);border-radius:14px;width:100%;max-width:720px;padding:20px;display:flex;flex-direction:column;gap:14px;border-top:4px solid var(--gold)}
+.panel h2{margin:0;font-family:var(--f-display);font-size:1.25rem}
+.panel p{margin:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.grid .full{grid-column:1/-1}
+@media (max-width:560px){.grid{grid-template-columns:minmax(0,1fr)}}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:.82rem;color:var(--muted)}
+.fld input,.fld textarea,.fld select{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--ink);font-size:.95rem}
+.fld textarea{min-height:56px;resize:vertical}
+.fld .hanin{font-family:var(--f-han);font-size:1.1rem}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row.end{justify-content:flex-end}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:22px;text-align:center;cursor:pointer;color:var(--muted)}
+.drop.over{border-color:var(--gold);background:var(--gold-soft)}
+.drop strong{color:var(--ink)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.tbl table{border-collapse:collapse;font-size:.8rem;min-width:100%}
+.tbl th,.tbl td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.tbl th{color:var(--muted);font-weight:600}
+.stats{display:flex;gap:16px;flex-wrap:wrap;font-variant-numeric:tabular-nums;font-size:.9rem}
+.stats b{font-size:1.15rem}
+.modes{display:flex;flex-direction:column;gap:6px;font-size:.9rem}
+.modes label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+.note{font-size:.82rem;color:var(--muted)}
+.confirm{background:var(--gold-soft);border-radius:8px;padding:10px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.9rem}
+.prog{height:6px;background:var(--chip);border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--gold);width:0;transition:width .2s}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;z-index:30;font-size:.9rem;max-width:calc(100% - 32px)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+footer{color:var(--muted);font-size:.8rem;text-align:center;padding-block:0 32px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <h1>Từ điển Tiếng Tiều</h1><span class="han">潮州話詞典</span>
+      <span class="count" id="count">Đang tải…</span>
+    </div>
+    <div class="searchrow">
+      <input id="q" type="search" placeholder="Tìm chữ Hán, phiên âm (Bhah4, Báh), nghĩa tiếng Việt…" autocomplete="off" aria-label="Tìm từ">
+      <button class="btn" id="btnShare" type="button" title="Chép liên kết tới kết quả đang tra">Chép link</button>
+    </div>
+    <div class="opts">
+      <label><input type="checkbox" id="inEx"> Tìm cả trong câu ví dụ</label>
+      <label>Từ loại <select id="pos"><option value="">Tất cả</option></select></label>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="status" id="status">Đang tải dữ liệu từ điển…</div>
+    <section aria-label="Mục lục" style="display:flex;flex-direction:column;gap:8px">
+      <div class="sec-label">Mục lục theo âm</div>
+      <div class="index" id="index"></div>
+    </section>
+    <div class="list" id="list"></div>
+  </div>
+</main>
+<footer><div class="wrap">Dữ liệu: <span id="srcInfo">tu-dien.xlsx</span></div></footer>
+<div class="toast" id="toast" hidden></div>
+
+<script src="xlsx.full.min.js"></script>
+<script>
+(() => {
+// Tên file dữ liệu. Muốn cập nhật từ điển: thay file này trên GitHub bằng file Excel mới (giữ nguyên tên).
+const DATA_FILE = "tu-dien.xlsx";
+
+const FIELDS = [
+  ["idx","Mục lục"],["han","Tiếng Tiều"],["py","Phiên âm chuẩn"],["pyd","Phiên âm đã đổi dấu"],
+  ["boi","Phiên âm bồi đã đổi dấu"],["boi0",""],["vi1","Nghĩa tiếng Việt 1"],["vi2","Nghĩa tiếng Việt 2"],
+  ["zh","Tiếng Trung Phổ Thông"],["pos","Từ loại"],["cls","Lượng từ"],["exTc","Ví dụ tiếng Tiều"],
+  ["exBoi","Phiên âm bồi ví dụ"],["exVi","Dịch nghĩa ví dụ"],["exZh","Ví dụ bằng tiếng Phổ Thông"],
+  ["see","Xem thêm"],["note","Ghi chú"]];
+const KEYS = FIELDS.map(f=>f[0]);
+const $ = id => document.getElementById(id);
+
+const fold = s => String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d").replace(/Đ/g,"d").toLowerCase();
+const foldPy = s => fold(s).replace(/[0-9]/g,"").replace(/\s+/g," ").trim();
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const clean = v => v==null ? "" : String(v).trim();
+const pyHtml = s => esc(s).replace(/([A-Za-zÀ-ỹêôơư])([0-9])/g,'$1<sup>$2</sup>');
+const tilde = (s,rep) => s ? esc(s).replace(/~/g, rep ? `<mark class="hw">${esc(rep)}</mark>` : '<mark class="hw">~</mark>') : "";
+
+let all=[], activeIdx="", shown=60;
+
+// ---------- đọc file Excel ----------
+const ALIAS = {};
+FIELDS.forEach(([k,h])=>{ if(h) ALIAS[fold(h).replace(/\s+/g,"")]=k; });
+Object.assign(ALIAS,{phiendaamdoidau:"pyd",phienamdoidau:"pyd",phienamboi:"boi",phienamboigoc:"boi0",nghiatiengviet:"vi1",tiengtrung:"zh",chuhan:"han"});
+function mapHeader(row){
+  const map=[]; let hits=0;
+  row.forEach((h,i)=>{ const k=ALIAS[fold(h).replace(/\s+/g,"")]; if(k){map[i]=k;hits++;} });
+  if(hits<3) return null;
+  row.forEach((h,i)=>{ if(!clean(h) && map[i-1]==="boi" && !map.includes("boi0")) map[i]="boi0"; });
+  return map;
+}
+function parseWorkbook(wb){
+  const out=[];
+  for(const name of wb.SheetNames){
+    const rows=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,defval:"",raw:false,blankrows:false});
+    let map=null,start=0;
+    for(let i=0;i<Math.min(rows.length,10);i++){ const m=mapHeader(rows[i]); if(m){map=m;start=i+1;break;} }
+    if(!map) map=KEYS.slice();
+    for(let i=start;i<rows.length;i++){
+      const r=rows[i], e={}; KEYS.forEach(k=>e[k]="");
+      map.forEach((k,j)=>{ if(k) e[k]=clean(r[j]); });
+      if(!e.han && !e.py && !e.vi1) continue;
+      if(!e.idx && e.py) e.idx=e.py.split(/\s+/)[0];
+      out.push(e);
+    }
+  }
+  return out;
+}
+
+function prepare(){
+  for(const e of all){
+    e._s={han:e.han, py:foldPy(e.py)+" | "+foldPy(e.pyd), boi:fold(e.boi)+" | "+fold(e.boi0),
+      vi:fold(e.vi1)+" | "+fold(e.vi2), zh:e.zh,
+      ex:[e.exTc,fold(e.exBoi),fold(e.exVi),e.exZh,fold(e.note),e.see].join(" ")};
+  }
+  $("count").textContent=all.length.toLocaleString("vi-VN")+" mục từ";
+  const s=new Set(all.map(e=>e.pos).filter(Boolean));
+  $("pos").innerHTML='<option value="">Tất cả</option>'+[...s].map(p=>`<option>${esc(p)}</option>`).join("");
+  buildIndex(); render();
+}
+function buildIndex(){
+  const m=new Map(); for(const e of all){ const k=e.idx||"(khác)"; m.set(k,(m.get(k)||0)+1); }
+  const el=$("index"); el.innerHTML="";
+  const mk=(k,label,n)=>{const b=document.createElement("button");b.type="button";b.setAttribute("aria-pressed",String(activeIdx===k));
+    b.innerHTML=`${esc(label)}${n!=null?`<span class="n">${n}</span>`:""}`;b.onclick=()=>{activeIdx=activeIdx===k?"":k;shown=60;buildIndex();render();};el.appendChild(b);};
+  mk("","Tất cả",null); for(const [k,n] of m) mk(k,k,n);
+}
+function score(e,q){
+  const qf=fold(q), qp=foldPy(q), S=e._s; let best=0;
+  const test=(hay,needle,w)=>{ if(!needle) return; for(const p of hay.split(" | ")){ if(!p) continue;
+    if(p===needle) best=Math.max(best,w*3); else if(p.startsWith(needle)) best=Math.max(best,w*2); else if(p.includes(needle)) best=Math.max(best,w);} };
+  test(S.han,q,10); test(S.py,qp,9); test(S.boi,qf,8);
+  for(const p of S.vi.split(/ \| |[,;]\s*/)){ const t=p.trim(); if(!t) continue;
+    if(t===qf) best=Math.max(best,27); else if(t.startsWith(qf)) best=Math.max(best,16); else if(t.includes(qf)) best=Math.max(best,7); }
+  test(S.zh,q,6);
+  if(!best && $("inEx").checked && (S.ex.includes(q)||S.ex.includes(qf))) best=1;
+  return best;
+}
+function render(){
+  const q=$("q").value.trim(), pos=$("pos").value;
+  let res=all;
+  if(activeIdx) res=res.filter(e=>(e.idx||"(khác)")===activeIdx);
+  if(pos) res=res.filter(e=>e.pos===pos);
+  if(q) res=res.map(e=>[score(e,q),e]).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]).map(x=>x[1]);
+  const el=$("list"); el.innerHTML="";
+  if(!res.length){ el.innerHTML=`<div class="empty">Không tìm thấy “${esc(q)}”.${$("inEx").checked?"":" Thử bật <b>Tìm cả trong câu ví dụ</b>."}</div>`; return; }
+  const frag=document.createDocumentFragment();
+  for(const e of res.slice(0,shown)) frag.appendChild(card(e));
+  el.appendChild(frag);
+  if(res.length>shown){ const b=document.createElement("button"); b.className="btn more"; b.textContent=`Xem thêm (${res.length-shown} mục nữa)`; b.onclick=()=>{shown+=60;render();}; el.appendChild(b); }
+}
+function card(e){
+  const d=document.createElement("article"); d.className="entry";
+  const pron=[];
+  if(e.pyd && e.pyd!==e.py) pron.push(`<span>Đổi dấu: <b class="py" style="font-size:.95em">${pyHtml(e.pyd)}</b></span>`);
+  if(e.boi) pron.push(`<span>Bồi: <b>${esc(e.boi)}</b></span>`);
+  if(e.boi0) pron.push(`<span>Bồi gốc: <b>${esc(e.boi0)}</b></span>`);
+  const hasEx=e.exTc||e.exBoi||e.exVi||e.exZh;
+  const see=e.see?e.see.split(/[;；\n]+/).map(s=>s.trim()).filter(Boolean).map(s=>`<a data-q="${esc(s.split("/")[0].trim())}">${esc(s)}</a>`).join(", "):"";
+  d.innerHTML=`
+    <div class="e-head">
+      <div class="e-han">${esc(e.han||"—")}</div>
+      <div class="e-pron"><div class="py">${pyHtml(e.py)}</div>${pron.length?`<div class="pron-row">${pron.join("")}</div>`:""}</div>
+    </div>
+    <div class="tags">${e.pos?`<span class="tag pos">${esc(e.pos)}</span>`:""}${e.cls?`<span class="tag">Lượng từ: <span style="font-family:var(--f-han)">${esc(e.cls)}</span></span>`:""}${e.idx?`<span class="tag">${esc(e.idx)}</span>`:""}</div>
+    <div><span class="mean">${esc(e.vi1)}${e.vi2?`<span class="alt">; ${esc(e.vi2)}</span>`:""}</span>${e.zh?` <span class="zh">· ${esc(e.zh)}</span>`:""}</div>
+    ${hasEx?`<div class="ex">
+      ${e.exTc?`<div class="tc">${tilde(e.exTc,e.han)}</div>`:""}
+      ${e.exBoi?`<div class="bo">${tilde(e.exBoi,e.boi)}</div>`:""}
+      ${e.exVi?`<div class="vi">${tilde(e.exVi,e.vi1)}</div>`:""}
+      ${e.exZh?`<div class="pz">${esc(e.exZh)}</div>`:""}</div>`:""}
+    ${(see||e.note)?`<div class="meta">${see?`<div>Xem thêm: ${see}</div>`:""}${e.note?`<div>Ghi chú: ${esc(e.note)}</div>`:""}</div>`:""}`;
+  d.querySelectorAll("a[data-q]").forEach(a=>a.onclick=()=>search(a.dataset.q));
+  return d;
+}
+function search(q){ $("q").value=q; activeIdx=""; shown=60; buildIndex(); render(); syncUrl(); window.scrollTo({top:0}); }
+function syncUrl(){ const q=$("q").value.trim(); const u=new URL(location.href); if(q) u.searchParams.set("q",q); else u.searchParams.delete("q"); history.replaceState(null,"",u); }
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true,2600); }
+
+let tmr; $("q").addEventListener("input",()=>{clearTimeout(tmr);tmr=setTimeout(()=>{shown=60;render();syncUrl();},150);});
+$("pos").onchange=()=>{shown=60;render();}; $("inEx").onchange=()=>render();
+$("btnShare").onclick=async()=>{ syncUrl(); try{ await navigator.clipboard.writeText(location.href); toast("Đã chép liên kết"); }catch{ toast(location.href); } };
+document.addEventListener("keydown",e=>{ if(e.key==="/" && !["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName)){ e.preventDefault(); $("q").focus(); } });
+
+(async()=>{
+  const st=$("status");
+  try{
+    if(typeof XLSX==="undefined") throw new Error("không tải được thư viện đọc Excel");
+    const res=await fetch(DATA_FILE+"?v="+Date.now(),{cache:"no-store"});
+    if(!res.ok) throw new Error("không tìm thấy file "+DATA_FILE+" ("+res.status+")");
+    const lm=res.headers.get("last-modified");
+    all=parseWorkbook(XLSX.read(await res.arrayBuffer(),{type:"array"}));
+    if(lm) $("srcInfo").textContent=DATA_FILE+" · cập nhật "+new Date(lm).toLocaleDateString("vi-VN");
+    st.hidden=true;
+    const q0=new URLSearchParams(location.search).get("q"); if(q0) $("q").value=q0;
+    prepare();
+  }catch(err){ st.textContent="Không tải được dữ liệu: "+err.message+". Kiểm tra mạng rồi tải lại trang."; st.className="status warn"; $("count").textContent=""; }
+})();
+})();
+</script>
+</body>
+</html>
